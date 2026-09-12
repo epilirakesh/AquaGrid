@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AquaGrid — AI-powered Marine Intelligence Platform</title>
+  <meta name="description" content="AquaGrid — a premium marine digital twin for Potential Fishing Zones, biodiversity hotspots and ocean currents along the Mumbai–Goa coast." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============================= LANDING ============================= -->
+<div id="landing" class="landing">
+  <canvas id="landing-canvas"></canvas>
+  <nav class="landing-nav">
+    <div class="brand">
+      <img src="assets/logo.svg" width="34" height="34" alt="" />
+      <span class="brand-name">Aqua<b>Grid</b></span>
+    </div>
+    <button class="btn lnav-cta" id="enter-top">Enter Dashboard <i class="fas fa-arrow-right"></i></button>
+  </nav>
+
+  <div class="landing-inner">
+    <header class="hero">
+      <span class="hero-badge"><i class="fas fa-satellite-dish"></i> Marine Digital Twin · Mumbai–Goa Coast</span>
+      <h1>AquaGrid</h1>
+      <p class="sub">AI-powered Marine Intelligence Platform — mapping Potential Fishing Zones, biodiversity hotspots and living ocean currents in one cinematic 3D experience.</p>
+      <div class="hero-cta">
+        <button class="btn btn-lg" id="enter-btn"><i class="fas fa-earth-asia"></i> Enter Dashboard</button>
+        <a class="btn btn-lg ghost" href="#problem"><i class="fas fa-circle-info"></i> Learn more</a>
+      </div>
+      <div class="hero-scroll"><span>Scroll to explore</span><i class="fas fa-chevron-down"></i></div>
+    </header>
+
+    <section class="section" id="problem">
+      <h2 class="reveal">Why AquaGrid</h2>
+      <p class="lead reveal">India's western coast feeds millions — yet fishers still hunt blind, and fragile ecosystems go unmonitored. AquaGrid turns raw ocean data into decisions.</p>
+      <div class="feature-grid">
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-fish-fins"></i></div><h3>Fishers need PFZ</h3><p>Fuel is expensive and the sea is vast. Predicting Potential Fishing Zones saves time, fuel and lives while improving catch per trip.</p></article>
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-dna"></i></div><h3>Biodiversity matters</h3><p>Hotspots of species richness must be tracked to protect breeding grounds and keep fisheries sustainable for the next generation.</p></article>
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-water"></i></div><h3>Ocean intelligence</h3><p>Currents, SST, salinity and chlorophyll define where life gathers. Fusing them into one live model is the heart of ocean intelligence.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="objectives">
+      <h2 class="reveal">Project Objectives</h2>
+      <div class="feature-grid">
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-bullseye"></i></div><h3>Predict &amp; Advise</h3><p>Forecast PFZ confidence for any date and location, with historical replay for validation.</p></article>
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-map-location-dot"></i></div><h3>Visualise Live</h3><p>A full-screen 3D digital twin with Windy-style current animation and interactive H3 cells.</p></article>
+        <article class="feature glass reveal"><div class="f-ic"><i class="fas fa-brain"></i></div><h3>Answer Questions</h3><p>An AI intelligence panel that speaks to fishers, researchers and policymakers alike.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="tech">
+      <h2 class="reveal">Technology</h2>
+      <p class="lead reveal">Built to be beautiful, fast and ready for Google Earth Engine data pipelines.</p>
+      <div class="tech-row reveal">
+        <span class="tech-chip"><i class="fas fa-map"></i> MapLibre GL · 3D Globe</span>
+        <span class="tech-chip"><i class="fas fa-water"></i> Particle Currents</span>
+        <span class="tech-chip"><i class="fas fa-hexagon-nodes"></i> H3 Grid</span>
+        <span class="tech-chip"><i class="fas fa-satellite"></i> Google Earth Engine-ready</span>
+        <span class="tech-chip"><i class="fas fa-chart-line"></i> Chart.js</span>
+        <span class="tech-chip"><i class="fas fa-bolt"></i> Zustand-style store</span>
+      </div>
+    </section>
+
+    <footer class="landing-footer">
+      <div class="brand" style="justify-content:center;margin-bottom:10px"><img src="assets/logo.svg" width="28" height="28" alt=""/><span class="brand-name">Aqua<b>Grid</b></span></div>
+      <p>Marine Intelligence Platform · Mumbai–Goa offshore study area</p>
+    </footer>
+  </div>
+</div>
+
+<!-- cinematic dive overlay -->
+<div id="dive"><div class="dive-ring"></div></div>
+
+<!-- ============================= DASHBOARD ============================= -->
+<div id="dashboard">
+  <!-- Single map: PFZ + Biodiversity layers crossfade by mode -->
+  <div id="map"></div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="map-vignette"></div>
+
+  <!-- Header -->
+  <header class="f-header glass">
+    <button class="icon-btn mobile-toggle" id="btn-mobile-nav" aria-label="Layers"><i class="fas fa-layer-group"></i></button>
+    <div class="brand">
+      <img src="assets/logo.svg" width="34" height="34" alt="" />
+      <span class="brand-name">Aqua<b>Grid</b></span>
+    </div>
+    <div class="mode-switch" id="map-mode-switch">
+      <button data-mapmode="pfz" class="active"><i class="fas fa-fish-fins"></i> PFZ</button>
+      <button data-mapmode="bio"><i class="fas fa-dna"></i> Biodiversity</button>
+    </div>
+    <nav class="topnav" role="tablist" aria-label="Primary">
+      <button data-tab="maps" class="active" role="tab"><i class="fas fa-map-location-dot"></i>Map<span class="kbd">1</span></button>
+      <button data-tab="overview" role="tab"><i class="fas fa-gauge-high"></i>Overview<span class="kbd">2</span></button>
+      <button data-tab="intel" role="tab"><i class="fas fa-brain"></i>Intelligence<span class="kbd">3</span></button>
+      <button data-tab="data" role="tab"><i class="fas fa-table"></i>Data<span class="kbd">4</span></button>
+      <button data-tab="help" role="tab"><i class="fas fa-circle-question"></i>Help<span class="kbd">?</span></button>
+    </nav>
+    <div class="header-right">
+      <div class="status-pill"><span class="dot"></span><span id="header-status">Live</span></div>
+      <button class="icon-btn" id="btn-notif" aria-label="Alerts"><i class="far fa-bell"></i><span class="badge">3</span></button>
+      <button class="icon-btn mobile-toggle" id="btn-drawer" aria-label="Telemetry"><i class="fas fa-chart-line"></i></button>
+      <button class="icon-btn" id="btn-home" aria-label="Back to landing" title="Back to landing"><i class="fas fa-house"></i></button>
+      <div class="avatar" title="Marine Analyst">MA</div>
+    </div>
+  </header>
+
+  <!-- Search (compact, top-left) -->
+  <div class="f-search glass" id="searchbar">
+    <div class="search-box"><i class="fas fa-magnifying-glass"></i><input type="text" id="global-search" placeholder="Search place or H3 cell…" aria-label="Search" /></div>
+  </div>
+
+  <!-- Collapse tabs to reopen closed sidebars -->
+  <button class="side-toggle left" id="open-sidebar" aria-label="Open layers" title="Layers"><i class="fas fa-layer-group"></i></button>
+  <button class="side-toggle right" id="open-telemetry" aria-label="Open telemetry" title="Telemetry"><i class="fas fa-satellite-dish"></i></button>
+
+  <!-- Sidebar: study focus + layers -->
+  <aside class="f-sidebar glass" id="sidebar" aria-label="Layers">
+    <div class="side-head">
+      <h4 class="side-title" style="margin:0"><i class="fas fa-sliders"></i> Controls</h4>
+      <button class="icon-btn side-close" id="close-sidebar" aria-label="Collapse layers" style="width:30px;height:30px"><i class="fas fa-angles-left"></i></button>
+    </div>
+
+    <div class="side-block">
+      <label class="fld-label" for="place-select">Study location</label>
+      <select id="place-select" class="side-field" aria-label="Study location"></select>
+      <label class="fld-label" for="date-input" style="margin-top:10px">Date</label>
+      <input type="date" id="date-input" class="side-field" aria-label="Date" />
+      <label class="fld-label" for="basemap-select" style="margin-top:10px">Basemap</label>
+      <select id="basemap-select" class="side-field" aria-label="Basemap view">
+        <option value="ocean">Normal (Ocean)</option>
+        <option value="satellite">Satellite</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <h4 class="side-title" style="margin-top:18px"><i class="fas fa-layer-group"></i> Layers</h4>
+    <div id="layer-controls"></div>
+    <h4 class="side-title" style="margin-top:16px"><i class="fas fa-satellite"></i> Earth Engine (ready)</h4>
+    <div id="gee-controls"></div>
+  </aside>
+
+  <!-- Mode tag (top-right, above telemetry) -->
+  <div class="f-mapctl">
+    <div class="glass mode-tag pred" id="map-mode-tag"><i class="fas fa-fish-fins"></i><span>PFZ · Forecast</span></div>
+  </div>
+
+  <!-- Currents + legend (bottom-left, above timeline) -->
+  <div class="f-mapctl-bl">
+    <div class="glass legend" id="legend"></div>
+    <div class="glass pill-ctl" id="current-ctl">
+      <button class="ic-btn" id="cur-play" aria-label="Toggle currents"><i class="fas fa-pause"></i></button>
+      <span style="font-size:12px;color:var(--text-2)">Currents</span>
+      <select id="cur-speed" aria-label="Current speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+      <select id="cur-density" aria-label="Density"><option value="0.5">Sparse</option><option value="1" selected>Normal</option><option value="1.8">Dense</option></select>
+    </div>
+  </div>
+
+  <!-- Telemetry -->
+  <aside class="f-telemetry glass" id="telemetry" aria-label="Telemetry">
+    <div class="side-head">
+      <h4 class="side-title" style="margin:0"><i class="fas fa-satellite-dish"></i> Cell Telemetry</h4>
+      <button class="icon-btn side-close" id="close-telemetry" aria-label="Collapse telemetry" style="width:30px;height:30px"><i class="fas fa-angles-right"></i></button>
+    </div>
+    <div id="telemetry-body">
+      <div class="tel-empty"><i class="fas fa-hexagon-nodes"></i>
+        <p>Select an H3 cell on the map to view telemetry.</p>
+        <p class="t-cap">Hover to preview • Click to pin • Double-click to fly to</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Reopen tab for the collapsed date player -->
+  <button class="tl-toggle" id="open-timeline" aria-label="Open date player" title="Date player"><i class="fas fa-clock-rotate-left"></i></button>
+
+  <!-- Timeline / Date player -->
+  <footer class="f-timeline glass" id="timeline">
+    <div class="tl-controls">
+      <button class="tl-btn" id="tl-prev" aria-label="Step back"><i class="fas fa-backward-step"></i></button>
+      <button class="tl-btn play" id="tl-play" aria-label="Play"><i class="fas fa-play"></i></button>
+      <button class="tl-btn" id="tl-next" aria-label="Step forward"><i class="fas fa-forward-step"></i></button>
+      <button class="tl-btn" id="tl-today" title="Now" aria-label="Now"><i class="fas fa-crosshairs"></i></button>
+      <span class="tl-date" id="tl-date">—</span>
+      <span class="tl-phase pred" id="tl-phase">Forecast</span>
+      <div class="tl-jump">
+        <input type="date" id="tl-datepick" aria-label="Pick date" />
+      </div>
+      <div class="tl-speed"><i class="fas fa-gauge-simple-high"></i>Speed
+        <select id="tl-speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select>
+      </div>
+      <button class="icon-btn side-close" id="close-timeline" aria-label="Collapse date player" style="width:32px;height:32px;margin-left:8px"><i class="fas fa-angles-down"></i></button>
+    </div>
+    <div class="tl-track-wrap" id="tl-track-wrap">
+      <div class="tl-track"></div>
+      <div class="tl-hist" id="tl-hist"></div>
+      <div class="tl-now" id="tl-now"></div>
+      <div class="tl-end" id="tl-end"></div>
+      <div class="tl-progress" id="tl-progress"></div>
+      <div class="tl-handle" id="tl-handle" role="slider" aria-label="Timeline" tabindex="0"></div>
+    </div>
+  </footer>
+
+  <!-- Full page views -->
+  <section class="page-view" id="view-overview"><div class="container"><h1 class="t-hero">Overview</h1><p class="t-cap">Mumbai–Goa offshore region · marine intelligence summary</p><div class="cards-grid" id="overview-cards"></div><div class="panel glass" style="margin-top:24px"><h3>PFZ Confidence — Historical &amp; Forecast</h3><div style="height:320px"><canvas id="trend-chart"></canvas></div></div></div></section>
+
+  <section class="page-view" id="view-intel"><div class="container"><h1 class="t-hero">AI Intelligence</h1><p class="t-cap">Ask AquaGrid — answers tailored to your role</p>
+    <div class="intel-roles" id="intel-roles">
+      <button class="intel-role active" data-role="fisher"><i class="fas fa-fish-fins"></i> Fisher</button>
+      <button class="intel-role" data-role="researcher"><i class="fas fa-flask"></i> Researcher</button>
+      <button class="intel-role" data-role="policy"><i class="fas fa-landmark"></i> Policy Maker</button>
+    </div>
+    <div id="intel-desc"></div>
+    <div class="intel-input"><input type="text" id="intel-query" placeholder="Ask about PFZ, biodiversity, currents, trends…" /><button class="btn" id="intel-ask"><i class="fas fa-paper-plane"></i> Ask</button></div>
+    <div class="intel-suggest" id="intel-suggest"></div>
+    <div id="intel-output"></div>
+  </div></section>
+
+  <section class="page-view" id="view-data"><div class="container"><h1 class="t-hero">Data Explorer</h1><p class="t-cap">Browse, filter &amp; export the AquaGrid record set</p>
+    <div class="table-toolbar">
+      <input type="text" id="data-search" placeholder="Search cell, date…" />
+      <select id="data-filter-conf"><option value="">All confidence</option><option>High</option><option>Medium</option><option>Low</option></select>
+      <select id="data-filter-source"><option value="">All phases</option><option value="forecast">Forecast</option><option value="historical">Historical</option></select>
+      <button class="btn ghost" id="data-export-csv"><i class="fas fa-file-csv"></i>Export CSV</button>
+      <button class="btn ghost" id="data-export-json"><i class="fas fa-file-code"></i>Export JSON</button>
+    </div>
+    <div style="overflow-x:auto"><table class="data-table glass" id="data-table"><thead></thead><tbody></tbody></table></div>
+    <p class="t-cap" id="data-count" style="margin-top:12px"></p>
+  </div></section>
+
+  <section class="page-view" id="view-help"><div class="container"><h1 class="t-hero">Help &amp; Documentation</h1><p class="t-cap">Navigate the AquaGrid digital twin</p><div id="help-page"></div></div></section>
+</div>
+
+<div id="map-tooltip"></div>
+<div id="toast"></div>
+
+<script src="js/coastline.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/h3-js@4.1.0/dist/h3-js.umd.js"></script>
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/layers-service.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/map.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/intelligence.js"></script>
+<script src="js/landing.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

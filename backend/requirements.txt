@@ -1,0 +1,9 @@
+fastapi==0.141.1
+uvicorn[standard]
+pydantic
+pandas
+numpy
+h3
+joblib
+xarray
+copernicusmarine

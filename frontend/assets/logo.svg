@@ -1,0 +1,20 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AquaGrid logo">
+  <defs>
+    <linearGradient id="agTeal" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#62E6FF"/>
+      <stop offset="1" stop-color="#19C6C8"/>
+    </linearGradient>
+    <linearGradient id="agWave" x1="6" y1="24" x2="34" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2ECC71"/>
+      <stop offset="1" stop-color="#19C6C8"/>
+    </linearGradient>
+  </defs>
+  <!-- H3 hexagon -->
+  <path d="M20 3L33 10.5V25.5L20 33L7 25.5V10.5L20 3Z" stroke="url(#agTeal)" stroke-width="2" fill="rgba(25,198,200,0.08)"/>
+  <!-- subtle inner grid hex -->
+  <path d="M20 9L28 13.5V22.5L20 27L12 22.5V13.5L20 9Z" stroke="rgba(98,230,255,0.35)" stroke-width="1" fill="none"/>
+  <!-- ocean wave -->
+  <path d="M11 21c2.5 0 2.5 2.6 5 2.6s2.5-2.6 5-2.6 2.5 2.6 5 2.6" stroke="url(#agWave)" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M11 25.4c2.5 0 2.5 2.4 5 2.4s2.5-2.4 5-2.4 2.5 2.4 4 2.4" stroke="url(#agWave)" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <circle cx="20" cy="15" r="1.6" fill="#62E6FF"/>
+</svg>
