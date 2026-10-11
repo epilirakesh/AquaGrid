@@ -8,11 +8,11 @@ import pandas as pd
 # <project>/backend/app/services/historical.py
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
-HISTORICAL_ARCHIVE = (
+HISTORICAL_ARCHIVE_DIR = (
     PROJECT_ROOT
     / "ml"
     / "replay_complete"
-    / "2023_2025_complete_daily.parquet"
+    / "yearly"
 )
 
 REQUIRED_COLUMNS = [
@@ -43,12 +43,18 @@ REQUIRED_COLUMNS = [
 def _load_archive() -> pd.DataFrame:
     """Load the certified 2023-2025 complete daily AquaGrid archive."""
 
-    if not HISTORICAL_ARCHIVE.exists():
+    archives = sorted(HISTORICAL_ARCHIVE_DIR.glob("*_daily.parquet"))
+
+    if not archives:
         raise FileNotFoundError(
-            f"AquaGrid historical archive not found: {HISTORICAL_ARCHIVE}"
+            f"AquaGrid historical archive directory not found or empty: "
+            f"{HISTORICAL_ARCHIVE_DIR}"
         )
 
-    df = pd.read_parquet(HISTORICAL_ARCHIVE)
+    df = pd.concat(
+        [pd.read_parquet(path) for path in archives],
+        ignore_index=True,
+    )
 
     missing = [column for column in REQUIRED_COLUMNS if column not in df.columns]
 
