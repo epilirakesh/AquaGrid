@@ -4,7 +4,7 @@
  */
 
 const AQ_API = (() => {
-  const BASE_URL = window.AQUAGRID_API_BASE || 'https://aquagrid-api-production-3c97.up.railway.app';
+  const BASE_URL = window.AQUAGRID_API_BASE || 'https://aquagrid-production-d5d1.up.railway.app';
 
   async function request(path, options = {}) {
     const response = await fetch(`${BASE_URL}${path}`, {
